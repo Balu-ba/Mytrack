@@ -530,6 +530,8 @@
       cigs: Number(h.cigs) || 0,
       drinks: Number(h.drinks) || 0,
       drinkNote: h.drinkNote || "",
+      pages: Number(h.pages) || 0,
+      bookNote: h.bookNote || "",
     };
   }
   function setHabit(key, patch) {
@@ -623,6 +625,13 @@
           </div>
           <p class="habit-hint">1 порция ≈ банка пива / бокал вина / стопка</p>
         </div>
+        <div class="habit-row">
+          <div class="habit-label">Чтение <span>страниц за день</span></div>
+          <input inputmode="numeric" id="hab-pages" value="${h.pages || ""}" placeholder="Сколько страниц" style="width:100%;height:48px;border:1px solid var(--line);border-radius:14px;text-align:center;font:inherit;font-size:18px;font-weight:800;background:#fff" />
+          <div class="habit-note">
+            <input id="hab-book-note" placeholder="Какую книгу читал" value="${h.bookNote.replace(/"/g, "&quot;")}" />
+          </div>
+        </div>
       </section>`;
   }
 
@@ -633,6 +642,8 @@
         cigs: Math.max(0, parseInt(document.getElementById("hab-cigs").value, 10) || 0),
         drinks: Math.max(0, parseInt(document.getElementById("hab-drinks").value, 10) || 0),
         drinkNote: document.getElementById("hab-drink-note").value.trim(),
+        pages: Math.max(0, parseInt(document.getElementById("hab-pages").value, 10) || 0),
+        bookNote: document.getElementById("hab-book-note").value.trim(),
       });
     };
     view.querySelectorAll("[data-hab]").forEach((btn) => {
@@ -645,15 +656,15 @@
         render();
       };
     });
-    ["hab-steps", "hab-cigs", "hab-drinks", "hab-drink-note"].forEach((id) => {
+    ["hab-steps", "hab-cigs", "hab-drinks", "hab-drink-note", "hab-pages", "hab-book-note"].forEach((id) => {
       const el = document.getElementById(id);
       if (!el) return;
       el.onchange = () => {
         saveFromInputs();
-        if (id !== "hab-drink-note") render();
+        if (id !== "hab-drink-note" && id !== "hab-book-note") render();
         else toast("Сохранено");
       };
-      if (id === "hab-drink-note") {
+      if (id === "hab-drink-note" || id === "hab-book-note") {
         el.onblur = () => {
           saveFromInputs();
         };
@@ -957,13 +968,15 @@
       );
     });
 
-    const habitRows = [["Дата", "Шаги", "Сигареты", "Алко (порции)", "Что пил"].join(";")];
+    const habitRows = [["Дата", "Шаги", "Сигареты", "Алко (порции)", "Что пил", "Страниц", "Книга"].join(";")];
     const habitKeys = Object.keys(state.habits).sort();
     habitKeys.forEach((k) => {
       const h = getHabit(k);
       const d = new Date(k + "T12:00:00");
       habitRows.push(
-        [fmtRu(d), h.steps, h.cigs, h.drinks, h.drinkNote].map(csvEscape).join(";")
+        [fmtRu(d), h.steps, h.cigs, h.drinks, h.drinkNote, h.pages, h.bookNote]
+          .map(csvEscape)
+          .join(";")
       );
     });
 
@@ -991,9 +1004,11 @@
     let stepsSum = 0;
     let cigsSum = 0;
     let drinksSum = 0;
+    let pagesSum = 0;
     let stepsDays = 0;
     let zeroCigDays = 0;
     let zeroDrinkDays = 0;
+    let readDays = 0;
     let logged = 0;
     for (let i = 0; i < 7; i++) {
       const k = toKey(addDays(d, -i));
@@ -1003,9 +1018,11 @@
       stepsSum += hh.steps;
       cigsSum += hh.cigs;
       drinksSum += hh.drinks;
+      pagesSum += hh.pages;
       if (hh.steps >= STEPS_GOAL) stepsDays++;
       if (hh.cigs === 0) zeroCigDays++;
       if (hh.drinks === 0) zeroDrinkDays++;
+      if (hh.pages > 0) readDays++;
     }
 
     const dateBar = `
@@ -1033,10 +1050,12 @@
         <div class="stat-box"><div class="n">${zeroCigDays}</div><div class="l">дней без сигарет</div></div>
         <div class="stat-box"><div class="n">${drinksSum}</div><div class="l">порций алко</div></div>
         <div class="stat-box"><div class="n">${zeroDrinkDays}</div><div class="l">дней без алко</div></div>
+        <div class="stat-box"><div class="n">${pagesSum}</div><div class="l">страниц прочитано</div></div>
+        <div class="stat-box"><div class="n">${readDays}</div><div class="l">дней с чтением</div></div>
       </div>
       <section class="card help" style="margin-top:8px">
         <strong>Зачем это</strong>
-        <p style="margin:8px 0 0">Шаги жгут жир. Сигареты и алко бьют по восстановлению и весу. Трекер просто показывает цифры — удобно, если режешь или бросаешь.</p>
+        <p style="margin:8px 0 0">Шаги жгут жир. Сигареты и алко бьют по восстановлению. Чтение — привычка вместо скролла. Трекер просто показывает цифры.</p>
       </section>
     `;
     bindDateNav(minKey, maxKey);

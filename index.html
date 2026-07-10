@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#1A3A2A" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Фитнес" />
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="apple-touch-icon" href="icons/icon-180.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <title>Домашний фитнес</title>
+</head>
+<body>
+  <div class="app">
+    <header class="top">
+      <div>
+        <p class="eyebrow" id="top-date">—</p>
+        <h1 id="top-title">Сегодня</h1>
+      </div>
+      <button type="button" class="chip" id="btn-install-hint" hidden>На экран</button>
+    </header>
+
+    <main id="view" class="view"></main>
+
+    <nav class="nav" aria-label="Меню">
+      <button type="button" class="nav-btn active" data-tab="today">
+        <span class="nav-ico">●</span>
+        <span>Сегодня</span>
+      </button>
+      <button type="button" class="nav-btn" data-tab="week">
+        <span class="nav-ico">▦</span>
+        <span>Неделя</span>
+      </button>
+      <button type="button" class="nav-btn" data-tab="habits">
+        <span class="nav-ico">◇</span>
+        <span>Привычки</span>
+      </button>
+      <button type="button" class="nav-btn" data-tab="measures">
+        <span class="nav-ico">◎</span>
+        <span>Замеры</span>
+      </button>
+      <button type="button" class="nav-btn" data-tab="more">
+        <span class="nav-ico">…</span>
+        <span>Ещё</span>
+      </button>
+    </nav>
+  </div>
+
+  <div id="toast" class="toast" hidden></div>
+  <div id="modal" class="modal" hidden>
+    <div class="modal-backdrop" data-close></div>
+    <div class="modal-sheet" role="dialog" aria-modal="true">
+      <div id="modal-content"></div>
+      <button type="button" class="btn btn-primary modal-close" data-close>Закрыть</button>
+    </div>
+  </div>
+  <script src="app.js"></script>
+</body>
+</html>

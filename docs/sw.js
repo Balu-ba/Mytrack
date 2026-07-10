@@ -1,13 +1,13 @@
-const CACHE = "home-fitness-v10";
+const CACHE = "home-fitness-v11";
 const ASSETS = [
-  "./",
-  "./index.html",
-  "./styles.css",
-  "./app.js",
-  "./manifest.webmanifest",
-  "./icons/icon-180.png",
-  "./icons/icon-192.png",
-  "./icons/icon-512.png",
+  "/Mytrack/",
+  "/Mytrack/index.html",
+  "/Mytrack/styles.css",
+  "/Mytrack/app.js",
+  "/Mytrack/manifest.webmanifest",
+  "/Mytrack/icons/icon-180.png",
+  "/Mytrack/icons/icon-192.png",
+  "/Mytrack/icons/icon-512.png",
 ];
 
 self.addEventListener("install", (e) => {
